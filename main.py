@@ -42,8 +42,6 @@ def main(argv):
 			TS_test_ok.append(TS)
 		if int(line.split()[0]) != 0:
 			TS_test_ko.append(TS)
-#		if int(line.split()[0]) != 0:
-#			TS_test_ko.append(TS)
 	f.close()
 	
 
