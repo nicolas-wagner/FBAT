@@ -211,3 +211,9 @@ class FBAT:
 		self.timeTest = stop-start
 		
 		return res,self.threshold,self.timeTrain,self.timeTest
+		
+	def get_test_dist_OK(self):
+		return([a for a in self.dist_test_ok])
+		
+	def get_test_dist_KO(self):
+		return([a for a in self.dist_test_ko])
