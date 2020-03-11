@@ -53,14 +53,18 @@ class FBAT:
 			time = 0
 			for j in range(len(harmonics)):
 				if j==0:
-					time = time + (abs(harmonics[j])/24.)*np.cos(2*np.pi*i*freqs[j] + np.angle(harmonics[j])- delay)
+					time = time + (abs(harmonics[j])/24.)*np.cos(2*np.pi*i*freqs[j] + np.angle(harmonics[j]) - delay)
 				elif j==(nbOfHarmonics-1):
 					time = time + (abs(harmonics[j])/24.)*np.cos(2*np.pi*i*freqs[j] + np.angle(harmonics[j]) - delay)
 				else:
 					time = time + (abs(harmonics[j])/12.)*np.cos(2*np.pi*i*freqs[j] + np.angle(harmonics[j]) - delay)
 			out.append(time)
 		return [a for a in out]
-		
+
+        # TS (train or test) sequence of length p + q
+        # p is number of elements in one period observation 
+	# q is the offset of the second curve
+	# z is the i-th harmonics to be kept	
 	@staticmethod	
 	def computeModels(TS,T,p=24,q=12,z=1):
 		TS1 = TS[:p]
@@ -147,7 +151,10 @@ class FBAT:
 				bestInd = i
 
 		self.threshold = thresholds[bestInd]
-		
+
+	# z is the i-th harmonics to be kept
+	# p is number of elements in one period observation 
+	# q is the offset of the second curve
 	def fit(self,p=24,q=12,z=1,threshold=None):
 		start = times.time()
 		
@@ -161,13 +168,13 @@ class FBAT:
 		for ts in self.data_train_ok:
 			MOD1,MOD2 = FBAT.computeModels(ts,T,p,q,z)
 			self.models_train_ok.append([MOD1,MOD2])
-			distance = sum([(MOD2[i]-MOD1[i])**2 for i in range(len(MOD1))])**(0.5)
+			distance = sum([(MOD2[i]-MOD1[i])**2 for i in range(len(MOD1))])**(0.5) ##Euclidian distance
 			self.dist_train_ok.append(distance)
 
 		for ts in self.data_train_ko:
 			MOD1,MOD2 = FBAT.computeModels(ts,T,p,q,z)
 			self.models_train_ko.append([MOD1,MOD2])
-			distance = sum([(MOD2[i]-MOD1[i])**2 for i in range(len(MOD1))])**(0.5)
+			distance = sum([(MOD2[i]-MOD1[i])**2 for i in range(len(MOD1))])**(0.5) ##Euclidian distance
 			self.dist_train_ko.append(distance)
 		
 		if threshold:
@@ -196,13 +203,13 @@ class FBAT:
 		for ts in self.data_test_ok:
 			MOD1,MOD2 = FBAT.computeModels(ts,T,p,q,z)
 			self.models_test_ok.append([MOD1,MOD2])
-			distance = sum([(MOD2[i]-MOD1[i])**2 for i in range(len(MOD1))])**(0.5)
+			distance = sum([(MOD2[i]-MOD1[i])**2 for i in range(len(MOD1))])**(0.5) ##Euclidian distance
 			self.dist_test_ok.append(distance)
 			
 		for ts in self.data_test_ko:
 			MOD1,MOD2 = FBAT.computeModels(ts,T,p,q,z)
 			self.models_test_ko.append([MOD1,MOD2])
-			distance = sum([(MOD2[i]-MOD1[i])**2 for i in range(len(MOD1))])**(0.5)
+			distance = sum([(MOD2[i]-MOD1[i])**2 for i in range(len(MOD1))])**(0.5) ##Euclidian distance
 			self.dist_test_ko.append(distance)
 			
 		res = self.get_test_performance()
