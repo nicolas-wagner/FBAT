@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
+from sklearn.metrics import auc
 
 class FBAT:
 	
@@ -106,21 +107,24 @@ class FBAT:
 		
 		return accG,precG,recG,prec[0],rec[0],prec[1],rec[1]
 		
-	def get_test_performance(self):
+	def get_test_performance(self, threshold=None):
 		nbOK = len(self.dist_test_ok)
 		nbKO = len(self.dist_test_ko)
 		y_pred = []
 		y_true = []
+
+		if threshold is None:
+                        threshold = self.threshold
 		
 		for e in self.dist_test_ok:
 			y_true.append(0)
-			if e>self.threshold:
+			if e>threshold:
 				y_pred.append(1)
 			else:
 				y_pred.append(0)
 		for e in self.dist_test_ko:
 			y_true.append(1)
-			if e>self.threshold:
+			if e>threshold:
 				y_pred.append(1)
 			else:
 				y_pred.append(0)
@@ -151,6 +155,34 @@ class FBAT:
 				bestInd = i
 
 		self.threshold = thresholds[bestInd]
+
+	def get_auc(self, train = True):
+		if train:
+			mini = min([min(self.dist_train_ok),min(self.dist_train_ko)])
+			maxi = max([max(self.dist_train_ok),max(self.dist_train_ko)])
+		else:
+			mini = min([min(self.dist_test_ok),min(self.dist_test_ko)])
+			maxi = max([max(self.dist_test_ok),max(self.dist_test_ko)])
+                      
+		thresholds = np.linspace(mini,maxi,10000)
+
+		bestThres = 0
+		bestInd = 0
+
+		tpr = []
+		fpr = []
+
+		for i in range(len(thresholds)):
+			if train: 
+                                res = self.get_train_performance(thresholds[i])
+                                tpr_loc, fpr_loc  = res[4], res[6]
+			else:
+				res = self.get_test_performance(thresholds[i])
+				tpr_loc, fpr_loc  = res[4], res[6]
+			tpr.append(tpr_loc)
+			fpr.append(fpr_loc)
+
+		return auc(fpr, tpr)
 
 	# z is the i-th harmonics to be kept
 	# p is number of elements in one period observation 
