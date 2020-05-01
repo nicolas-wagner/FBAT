@@ -62,9 +62,9 @@ def main(argv):
 	stop = times.time()
 	totalTime = stop-start
 	
-	f.write("Z THRESHOLD TIME_TRAIN TIME_TEST TIME_TOTAL ACC PREC_TOT REC_TOT PREC_OK REC_OK PREC_KO REC_KO AUC_TRAIN AUC_TEST\n")
-	f.write("%d %f %f %f %f %f %f %f %f %f %f %f %f %f\n"%(1,results[1],results[2],results[3],totalTime,results[0][0],results[0][1],results[0][2],results[0][3],results[0][4],results[0][5],results[0][6], fbat.get_auc(True), fbat.get_auc(False)))
-	print("%d %f %f %f %f %f %f %f %f %f %f %f %f %f\n"%(1,results[1],results[2],results[3],totalTime,results[0][0],results[0][1],results[0][2],results[0][3],results[0][4],results[0][5],results[0][6], fbat.get_auc(True), fbat.get_auc(False)))
+	f.write("Z THRESHOLD TIME_TRAIN TIME_TEST TIME_TOTAL ACC PREC_TOT REC_TOT PREC_OK REC_OK PREC_KO REC_KO AUC_TRAIN AUC_TEST TP TN FP FN\n")
+	f.write("%d %f %f %f %f %f %f %f %f %f %f %f %f %f %d %d %d %d\n"%(1,results[1],results[2],results[3],totalTime,results[0][0],results[0][1],results[0][2],results[0][3],results[0][4],results[0][5],results[0][6], fbat.get_auc(True), fbat.get_auc(False),results[0][7],results[0][9],results[0][10],results[0][8]))
+	print("%d %f %f %f %f %f %f %f %f %f %f %f %f %f %d %d %d %d\n"%(1,results[1],results[2],results[3],totalTime,results[0][0],results[0][1],results[0][2],results[0][3],results[0][4],results[0][5],results[0][6], fbat.get_auc(True), fbat.get_auc(False),results[0][7],results[0][9],results[0][10],results[0][8]))
 	f.close()
 	
 	

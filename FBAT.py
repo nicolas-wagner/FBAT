@@ -112,22 +112,30 @@ class FBAT:
 		nbKO = len(self.dist_test_ko)
 		y_pred = []
 		y_true = []
+		TN = 0
+		TP = 0
+		FN = 0
+		FP = 0
 
 		if threshold is None:
-                        threshold = self.threshold
+			threshold = self.threshold
 		
 		for e in self.dist_test_ok:
 			y_true.append(0)
 			if e>threshold:
 				y_pred.append(1)
+				FP = FP +1 
 			else:
 				y_pred.append(0)
+				TN = TN +1
 		for e in self.dist_test_ko:
 			y_true.append(1)
 			if e>threshold:
 				y_pred.append(1)
+				TP = TP +1
 			else:
 				y_pred.append(0)
+				FN = FN +1
 				
 		accG = accuracy_score(y_true,y_pred)
 		precG = precision_score(y_true,y_pred,average='macro')
@@ -136,7 +144,7 @@ class FBAT:
 		prec = precision_score(y_true,y_pred,average=None,labels=labels)
 		rec = recall_score(y_true,y_pred,average=None,labels=labels)	
 		
-		return accG,precG,recG,prec[0],rec[0],prec[1],rec[1]
+		return accG,precG,recG,prec[0],rec[0],prec[1],rec[1],TP,FN,TN,FP
 		
 	def train_threshold(self):
 	
