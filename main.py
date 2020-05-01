@@ -51,21 +51,23 @@ def main(argv):
 	print("set test")
 	fbat.set_test(TS_test_ok,TS_test_ko)
 	
-	print("fit train")
-	fbat.fit(p=24,q=12,z=1)
-	print("eval test")
-	results = fbat.eval_test(p=24,q=12,z=1)
+	for zHarm in range(1,13):
 	
-	f = open(fileOut,'w')
-			
-	# accG,precG,recG,precOK,recOK,precKO,recKO
-	stop = times.time()
-	totalTime = stop-start
-	
-	f.write("Z THRESHOLD TIME_TRAIN TIME_TEST TIME_TOTAL ACC PREC_TOT REC_TOT PREC_OK REC_OK PREC_KO REC_KO AUC_TRAIN AUC_TEST TP TN FP FN\n")
-	f.write("%d %f %f %f %f %f %f %f %f %f %f %f %f %f %d %d %d %d\n"%(1,results[1],results[2],results[3],totalTime,results[0][0],results[0][1],results[0][2],results[0][3],results[0][4],results[0][5],results[0][6], fbat.get_auc(True), fbat.get_auc(False),results[0][7],results[0][9],results[0][10],results[0][8]))
-	print("%d %f %f %f %f %f %f %f %f %f %f %f %f %f %d %d %d %d\n"%(1,results[1],results[2],results[3],totalTime,results[0][0],results[0][1],results[0][2],results[0][3],results[0][4],results[0][5],results[0][6], fbat.get_auc(True), fbat.get_auc(False),results[0][7],results[0][9],results[0][10],results[0][8]))
-	f.close()
+		print("fit train")
+		fbat.fit(p=24,q=12,z=zHarm)
+		print("eval test")
+		results = fbat.eval_test(p=24,q=12,z=zHarm)
+		
+		f = open(fileOut,'a')
+				
+		# accG,precG,recG,precOK,recOK,precKO,recKO
+		stop = times.time()
+		totalTime = stop-start
+		
+		f.write("Z THRESHOLD TIME_TRAIN TIME_TEST TIME_TOTAL ACC PREC_TOT REC_TOT PREC_OK REC_OK PREC_KO REC_KO AUC_TRAIN AUC_TEST TP TN FP FN\n")
+		f.write("%d %f %f %f %f %f %f %f %f %f %f %f %f %f %d %d %d %d\n"%(zHarm,results[1],results[2],results[3],totalTime,results[0][0],results[0][1],results[0][2],results[0][3],results[0][4],results[0][5],results[0][6], fbat.get_auc(True), fbat.get_auc(False),results[0][7],results[0][9],results[0][10],results[0][8]))
+		print("%d %f %f %f %f %f %f %f %f %f %f %f %f %f %d %d %d %d\n"%(zHarm,results[1],results[2],results[3],totalTime,results[0][0],results[0][1],results[0][2],results[0][3],results[0][4],results[0][5],results[0][6], fbat.get_auc(True), fbat.get_auc(False),results[0][7],results[0][9],results[0][10],results[0][8]))
+		f.close()
 	
 	
 	
