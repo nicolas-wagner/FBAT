@@ -157,7 +157,7 @@ class FBAT:
 		bestInd = 0
 
 		for i in range(len(thresholds)):
-			sc = self.get_train_performance(thresholds[i])[0] ##acc
+			sc = self.get_train_performance(thresholds[i])[2] ##acc
 			if sc > bestThres:
 				bestThres = sc
 				bestInd = i
