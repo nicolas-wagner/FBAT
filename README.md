@@ -6,7 +6,7 @@ It is a method that allows to classify time series.
 
 Install all requirements from pip:
 ```
-Pip install -r requirements/requirements.out
+pip install -r requirements/requirements.out
 ```
 ## How to use
 You can start by using the main file that contain an example of use:
