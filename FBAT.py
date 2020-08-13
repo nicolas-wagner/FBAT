@@ -4,6 +4,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 from sklearn.metrics import auc
+import matplotlib.pyplot as plt
 
 class FBAT:
 	
@@ -164,7 +165,7 @@ class FBAT:
 
 		self.threshold = thresholds[bestInd]
 
-	def get_auc(self, train = True):
+	def get_auc(self, train = True, plot = False, plotName ='auc.png'):
 		if train:
 			mini = min([min(self.dist_train_ok),min(self.dist_train_ko)])
 			maxi = max([max(self.dist_train_ok),max(self.dist_train_ko)])
@@ -183,13 +184,28 @@ class FBAT:
 		for i in range(len(thresholds)):
 			if train: 
                                 res = self.get_train_performance(thresholds[i])
-                                tpr_loc, fpr_loc  = res[4], res[6]
+                                tpr_loc, fpr_loc  = res[6], 1 - res[4]
 			else:
 				res = self.get_test_performance(thresholds[i])
-				tpr_loc, fpr_loc  = res[4], res[6]
+				tpr_loc, fpr_loc  = res[6], 1 - res[4]
 			tpr.append(tpr_loc)
 			fpr.append(fpr_loc)
 
+		if plot:
+			plt.figure()
+			lw = 2
+			plt.plot(fpr, tpr, color='darkorange',
+                                 lw=lw, label='ROC curve (area = %0.2f)' % auc(fpr, tpr))
+			plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+			plt.xlim([0.0, 1.0])
+			plt.ylim([0.0, 1.05])
+			plt.xlabel('False Positive Rate')
+			plt.ylabel('True Positive Rate')
+			plt.title('Receiver operating characteristic')
+			plt.legend(loc="lower right")
+			plt.show()
+			plt.savefig(plotName)
+                        
 		return auc(fpr, tpr)
 
 	# z is the i-th harmonics to be kept
