@@ -63,8 +63,8 @@ class FBAT:
 			out.append(time)
 		return [a for a in out]
 
-        # TS (train or test) sequence of length p + q
-        # p is number of elements in one period observation 
+	# TS (train or test) sequence of length p + q
+	# p is number of elements in one period observation 
 	# q is the offset of the second curve
 	# z is the i-th harmonics to be kept	
 	@staticmethod	
@@ -81,8 +81,6 @@ class FBAT:
 		return MOD1,MOD2
 		
 	def get_train_performance(self,threshold):
-		nbOK = len(self.dist_train_ok)
-		nbKO = len(self.dist_train_ko)
 		y_pred = []
 		y_true = []
 		
@@ -109,8 +107,6 @@ class FBAT:
 		return accG,precG,recG,prec[0],rec[0],prec[1],rec[1]
 		
 	def get_test_performance(self, threshold=None):
-		nbOK = len(self.dist_test_ok)
-		nbKO = len(self.dist_test_ko)
 		y_pred = []
 		y_true = []
 		TN = 0
@@ -172,19 +168,16 @@ class FBAT:
 		else:
 			mini = min([min(self.dist_test_ok),min(self.dist_test_ko)])
 			maxi = max([max(self.dist_test_ok),max(self.dist_test_ko)])
-                      
+		
 		thresholds = np.linspace(mini,maxi,10000)
-
-		bestThres = 0
-		bestInd = 0
 
 		tpr = []
 		fpr = []
 
 		for i in range(len(thresholds)):
 			if train: 
-                                res = self.get_train_performance(thresholds[i])
-                                tpr_loc, fpr_loc  = res[6], 1 - res[4]
+				res = self.get_train_performance(thresholds[i])
+				tpr_loc, fpr_loc  = res[6], 1 - res[4]
 			else:
 				res = self.get_test_performance(thresholds[i])
 				tpr_loc, fpr_loc  = res[6], 1 - res[4]
@@ -205,7 +198,7 @@ class FBAT:
 			plt.legend(loc="lower right")
 			plt.show()
 			plt.savefig(plotName)
-                        
+
 		return auc(fpr, tpr)
 
 	# z is the i-th harmonics to be kept
@@ -234,7 +227,7 @@ class FBAT:
 			self.dist_train_ko.append(distance)
 		
 		if threshold:
-			self.threshold == threshold
+			self.threshold = threshold
 		else:	
 			self.train_threshold()
 			
