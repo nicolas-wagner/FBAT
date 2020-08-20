@@ -96,7 +96,7 @@ class FBAT:
 				y_pred.append(1)
 			else:
 				y_pred.append(0)
-				
+			
 		accG = accuracy_score(y_true,y_pred)
 		precG = precision_score(y_true,y_pred,average='macro')
 		recG = recall_score(y_true,y_pred,average='macro')
@@ -196,8 +196,9 @@ class FBAT:
 			plt.ylabel('True Positive Rate')
 			plt.title('Receiver operating characteristic')
 			plt.legend(loc="lower right")
-			plt.show()
+			#plt.show()
 			plt.savefig(plotName)
+			plt.close()
 
 		return auc(fpr, tpr)
 
